@@ -18,7 +18,7 @@ if res, er := client.Search("ちくわ"); er != nil {
 - [x] Search API
     - [x] GET search
     - [x] GET search/newest
-    - [ ] GET search/random
+    - [x] GET search/random
 - [ ] Image API
     - [ ] GET images/:id
     - [ ] POST images

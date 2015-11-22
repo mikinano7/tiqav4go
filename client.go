@@ -11,6 +11,7 @@ import (
 const (
 	searchApiUrl = "http://api.tiqav.com/search.json"
 	searchNewestApiUrl = "http://api.tiqav.com/search/newest.json"
+	searchRandomApiUrl = "http://api.tiqav.com/search/random.json"
 )
 
 // Tiqav API client that wrapped http.Client struct.
@@ -39,6 +40,17 @@ func (tc TiqavClient) Search(query string) ([]Tiqav, error) {
 
 func (tc TiqavClient) SearchNewest() ([]Tiqav, error) {
 	response, err := tc.client.Get(searchNewestApiUrl)
+	defer response.Body.Close()
+
+	if err != nil {
+		return nil, err
+	} else {
+		return parse(response.Body)
+	}
+}
+
+func (tc TiqavClient) SearchRandom() ([]Tiqav, error) {
+	response, err := tc.client.Get(searchRandomApiUrl)
 	defer response.Body.Close()
 
 	if err != nil {
