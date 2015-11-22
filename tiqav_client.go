@@ -29,17 +29,19 @@ func NewTiqavClient() *TiqavClient {
 //   - specify the number of response
 func (tc TiqavClient) Search(query string) ([]Tiqav, error) {
 	url := fmt.Sprintf("%s?q=%s", SearchApiUrl, query)
-	if response, err := tc.client.Get(url); err != nil {
+	response, err := tc.client.Get(url)
+	if err != nil {
 		return nil, err
 	}
 	defer response.Body.Close()
 
-	if body, err := ioutil.ReadAll(response.Body); err != nil {
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
 		return nil, err
 	}
 
 	var results []Tiqav
-	if err = json.Unmarshal(body, &results); err != nil {
+	if err = json.Unmarshal(body, &results); err == nil {
 		return nil, err
 	}
 
