@@ -37,7 +37,7 @@ func (tc TiqavClient) Search(query string) ([]Tiqav, error) {
 	}
 
 	var results []Tiqav
-	if err = json.Unmarshal(body, &results); err == nil {
+	if err = json.Unmarshal(body, &results); err != nil {
 		return nil, err
 	}
 
