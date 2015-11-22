@@ -10,6 +10,8 @@ const (
 type Tiqav struct {
 	Id        string `json:"id"`
 	Ext       string `json:"ext"`
+	Height    int    `json:"height"`
+	Width     int    `json:"width"`
 	SourceUrl string `json:"source_url"`
 }
 
