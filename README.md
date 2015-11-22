@@ -13,10 +13,18 @@ if results, err := client.Search("query"); err != nil {
 ```
 
 # Progress
-- [ ] Search API
-    - [x] search by specified word
-    - [ ] error handling
-    - [ ] specify the number of response
+- [ ] Image Entity
+    - [x] Original
+    - [ ] Thumbnail
+    - [ ] Glitch
+- [x] Search API
+    - [x] GET search
+    - [ ] GET search/newest
+    - [ ] GET search/random
 - [ ] Image API
+    - [ ] GET images/:id
+    - [ ] POST images
 - [ ] Tag API
-
+    - [ ] GET images/:id/tags
+    - [ ] GET tags
+- [ ] I'm Feeling Lucky

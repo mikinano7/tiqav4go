@@ -23,10 +23,6 @@ func NewTiqavClient() *TiqavClient {
 
 // Request Tiqav Search API and then return response.
 // Close connection automatically when request is finished.
-//
-// TODO:
-//   - error handling
-//   - specify the number of response
 func (tc TiqavClient) Search(query string) ([]Tiqav, error) {
 	url := fmt.Sprintf("%s?q=%s", SearchApiUrl, query)
 	response, err := tc.client.Get(url)
