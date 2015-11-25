@@ -4,12 +4,21 @@ tiqav4go is a [tiqav](http://dev.tiqav.com/) API binding library for the Go lang
 # Usage
 ```go
 client := NewTiqavClient()
-if res, er := client.Search("ちくわ"); er != nil {
-	fmt.Print(er)
+
+// Search API
+if res, err := client.Search("ちくわ"); err != nil {
+	fmt.Print(err)
 } else {
 	for i := 0; i < len(res); i++ {
 		fmt.Println(res[i].Image().Glitch)
 	}
+}
+
+// Image API
+if res, err := client.GetImages("1eb"); err != nil {
+	fmt.Print(err)
+} else {
+	fmt.Println(res.Image().Original)
 }
 ```
 

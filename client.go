@@ -12,6 +12,8 @@ const (
 	searchApiUrl = "http://api.tiqav.com/search.json"
 	searchNewestApiUrl = "http://api.tiqav.com/search/newest.json"
 	searchRandomApiUrl = "http://api.tiqav.com/search/random.json"
+	getImagesApiUrl = "http://api.tiqav.com/images/"
+	postImagesApiUrl = "http://api.tiqav.com/images.json"
 )
 
 // Tiqav API client that wrapped http.Client struct.
@@ -34,7 +36,7 @@ func (tc TiqavClient) Search(query string) ([]Tiqav, error) {
 	if err != nil {
 		return nil, err
 	} else {
-		return parse(response.Body)
+		return parseList(response.Body)
 	}
 }
 
@@ -45,7 +47,7 @@ func (tc TiqavClient) SearchNewest() ([]Tiqav, error) {
 	if err != nil {
 		return nil, err
 	} else {
-		return parse(response.Body)
+		return parseList(response.Body)
 	}
 }
 
@@ -56,12 +58,23 @@ func (tc TiqavClient) SearchRandom() ([]Tiqav, error) {
 	if err != nil {
 		return nil, err
 	} else {
+		return parseList(response.Body)
+	}
+}
+
+func (tc TiqavClient) GetImages(id string) (*Tiqav, error) {
+	response, err := tc.client.Get(getImagesApiUrl + id + ".json")
+	defer response.Body.Close()
+
+	if err != nil {
+		return nil, err
+	} else {
 		return parse(response.Body)
 	}
 }
 
 // parse will deserialize JSON of response.
-func parse(body io.Reader) ([]Tiqav, error) {
+func parseList(body io.Reader) ([]Tiqav, error) {
 	res, err := ioutil.ReadAll(body)
 	if err != nil {
 		return nil, err
@@ -70,7 +83,21 @@ func parse(body io.Reader) ([]Tiqav, error) {
 	var results []Tiqav
 	if err = json.Unmarshal(res, &results); err != nil {
 		return nil, err
+	} else {
+		return results, nil
+	}
+}
+
+func parse(body io.Reader) (*Tiqav, error) {
+	res, err := ioutil.ReadAll(body)
+	if err != nil {
+		return nil, err
 	}
 
-	return results, nil
+	result := new(Tiqav)
+	if err = json.Unmarshal(res, result); err != nil {
+		return nil, err
+	} else {
+		return result, nil
+	}
 }
