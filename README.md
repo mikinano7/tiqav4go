@@ -29,7 +29,7 @@ if res, err := client.GetImages("1eb"); err != nil {
     - [x] GET search/newest
     - [x] GET search/random
 - [ ] Image API
-    - [ ] GET images/:id
+    - [x] GET images/:id
     - [ ] POST images
 - [ ] Tag API
     - [ ] GET images/:id/tags

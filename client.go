@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"io"
+	"time"
 )
 
 const (
@@ -16,18 +17,28 @@ const (
 	postImagesApiUrl = "http://api.tiqav.com/images.json"
 )
 
-// Tiqav API client that wrapped http.Client struct.
+/*
+ TiqavClient is a Tiqav API client that wrapped http.Client struct.
+ @see http://dev.tiqav.com/
+*/
 type TiqavClient struct {
 	client *http.Client
 }
 
-// Return new Tiqav API client that includes new http.Client.
+/*
+ Return new Tiqav API client that includes new http.Client.
+ Default Timeout set 10 seconds.
+*/
 func NewTiqavClient() *TiqavClient {
-	return &TiqavClient{&http.Client{}}
+	return &TiqavClient{
+		&http.Client{Timeout: time.Duration(10) * time.Second},
+	}
 }
 
-// Request Tiqav Search API and then return response.
-// Close connection automatically when request is finished.
+/*
+ Request to Tiqav Search API and then return response.
+ Close connection automatically when request is finished.
+*/
 func (tc TiqavClient) Search(query string) ([]Tiqav, error) {
 	url := fmt.Sprintf("%s?q=%s", searchApiUrl, query)
 	response, err := tc.client.Get(url)
@@ -36,7 +47,7 @@ func (tc TiqavClient) Search(query string) ([]Tiqav, error) {
 	if err != nil {
 		return nil, err
 	} else {
-		return parseList(response.Body)
+		return parseArray(response.Body)
 	}
 }
 
@@ -47,7 +58,7 @@ func (tc TiqavClient) SearchNewest() ([]Tiqav, error) {
 	if err != nil {
 		return nil, err
 	} else {
-		return parseList(response.Body)
+		return parseArray(response.Body)
 	}
 }
 
@@ -58,7 +69,7 @@ func (tc TiqavClient) SearchRandom() ([]Tiqav, error) {
 	if err != nil {
 		return nil, err
 	} else {
-		return parseList(response.Body)
+		return parseArray(response.Body)
 	}
 }
 
@@ -73,8 +84,7 @@ func (tc TiqavClient) GetImages(id string) (*Tiqav, error) {
 	}
 }
 
-// parse will deserialize JSON of response.
-func parseList(body io.Reader) ([]Tiqav, error) {
+func parseArray(body io.Reader) ([]Tiqav, error) {
 	res, err := ioutil.ReadAll(body)
 	if err != nil {
 		return nil, err
